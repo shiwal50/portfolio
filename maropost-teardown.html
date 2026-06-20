@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maropost Marketing Cloud — Product Teardown by Shiwal Singh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:"Inter",sans-serif;background:#0C1220;color:#E8EDF5;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+:root{
+  --blue:#1B6EF3;--blue-mid:#4B8FF5;--blue-pale:rgba(27,110,243,0.1);--blue-border:rgba(27,110,243,0.25);
+  --bg:#0C1220;--bg2:#111827;--surface:#1A2235;--surface2:#1F2A40;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+  --text:#E8EDF5;--text2:#A0AABB;--text3:#5A6880;
+  --green:#10B981;--green-bg:rgba(16,185,129,0.08);
+  --amber:#F59E0B;--amber-bg:rgba(245,158,11,0.08);
+  --red:#EF4444;--red-bg:rgba(239,68,68,0.08);
+  --r:6px;--r-lg:10px;
+}
+/* COVER */
+.cover{background:var(--bg2);min-height:520px;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;position:relative;border-bottom:1px solid var(--border2)}
+.cover::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 70% 50%,rgba(27,110,243,.12) 0%,transparent 70%);pointer-events:none}
+.cover-left{padding:60px 52px 60px 60px;display:flex;flex-direction:column;justify-content:space-between;position:relative;z-index:1}
+.cover-tag{display:inline-flex;align-items:center;gap:8px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--blue-mid);font-weight:500;margin-bottom:24px}
+.cover-tag-dot{width:6px;height:6px;background:var(--blue);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.cover h1{font-family:"Spectral",serif;font-size:46px;font-weight:700;line-height:1.06;color:#fff;margin-bottom:18px;letter-spacing:-1px}
+.cover h1 em{color:var(--blue-mid);font-style:italic}
+.cover-sub{font-size:14px;color:var(--text2);line-height:1.75;max-width:420px;margin-bottom:36px}
+.cover-meta{display:grid;grid-template-columns:repeat(2,auto);gap:10px 28px;align-self:flex-end}
+.meta-item{display:flex;flex-direction:column;gap:2px}
+.meta-item span:first-child{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--text3);font-weight:500}
+.meta-item span:last-child{font-size:13px;color:var(--text2)}
+.cover-right{position:relative;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center}
+/* STATS */
+.stats-band{background:var(--bg);display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid var(--border)}
+.stat-item{padding:22px;border-right:1px solid var(--border);text-align:center}
+.stat-item:last-child{border-right:none}
+.stat-val{font-family:"Spectral",serif;font-size:22px;font-weight:700;color:#fff;line-height:1;margin-bottom:4px}
+.stat-val.blue{color:var(--blue-mid)}
+.stat-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3)}
+/* TOC */
+.toc-bar{background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;padding:0 60px;display:flex;align-items:center;overflow-x:auto}
+.toc-link{display:inline-flex;align-items:center;gap:5px;padding:13px 14px;font-size:11px;font-weight:500;color:var(--text3);border-bottom:2px solid transparent;white-space:nowrap;transition:color .2s,border-color .2s}
+.toc-link:hover{color:var(--blue-mid);border-bottom-color:var(--blue-mid)}
+.toc-num{font-size:9px;color:var(--blue);opacity:.7;font-weight:600}
+/* PAGE */
+.page{max-width:1080px;margin:0 auto;padding:0 60px}
+.section{padding:68px 0;border-top:1px solid var(--border)}
+.section:first-child{border-top:none}
+.eyebrow{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--blue-mid);font-weight:600;margin-bottom:10px}
+.section-title{font-family:"Spectral",serif;font-size:30px;font-weight:700;color:#fff;line-height:1.2;letter-spacing:-.5px;margin-bottom:10px}
+.section-desc{font-size:14px;color:var(--text2);max-width:560px;margin-bottom:36px;line-height:1.75}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:start}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+.prose{font-size:14px;color:var(--text2);line-height:1.85}
+.prose+.prose{margin-top:14px}
+.prose strong{color:var(--text);font-weight:500}
+.pullquote{border-left:3px solid var(--blue);padding:16px 20px;margin:24px 0;background:var(--blue-pale);border-radius:0 var(--r) var(--r) 0}
+.pullquote p{font-family:"Spectral",serif;font-size:16px;color:#C8D8F5;line-height:1.65;font-style:italic}
+.pullquote cite{font-family:"Inter",sans-serif;font-size:11px;color:var(--blue-mid);font-style:normal;font-weight:500;margin-top:8px;display:block;letter-spacing:1.5px;text-transform:uppercase}
+.callout{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r-lg);padding:20px 24px;margin:20px 0;position:relative}
+.callout::before{content:attr(data-label);position:absolute;top:-10px;left:16px;background:var(--blue);color:#fff;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:3px 10px;border-radius:3px;font-weight:600}
+.callout p{font-size:13px;color:var(--text2);line-height:1.75}
+.mockup-frame{background:var(--bg);border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--border2);margin:24px 0}
+.mockup-bar{background:#0A0F1A;padding:9px 13px;display:flex;align-items:center;gap:6px}
+.m-dot{width:9px;height:9px;border-radius:50%}
+.mockup-bar span{font-size:9px;color:var(--text3);margin-left:8px;letter-spacing:1px;text-transform:uppercase}
+.mockup-caption{font-size:11px;color:var(--text3);text-align:center;margin-top:7px;font-style:italic}
+.arch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0}
+.arch-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px;transition:border-color .2s,transform .2s}
+.arch-card:hover{border-color:var(--blue-border);transform:translateY(-2px)}
+.arch-icon{width:36px;height:36px;border-radius:var(--r);background:var(--blue-pale);border:1px solid var(--blue-border);display:flex;align-items:center;justify-content:center;font-size:17px;margin-bottom:10px}
+.arch-card h4{font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)}
+.arch-card p{font-size:11px;color:var(--text3);line-height:1.6}
+.arch-tag{margin-top:7px;display:inline-block;font-size:10px;color:var(--blue-mid);font-weight:500;letter-spacing:.8px;text-transform:uppercase}
+.seg-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.seg-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px;border-top:3px solid var(--border)}
+.seg-card.p1{border-top-color:var(--blue)}.seg-card.p2{border-top-color:#7C3AED}.seg-card.p3{border-top-color:var(--green)}
+.seg-tier{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:5px}
+.seg-card.p1 .seg-tier{color:var(--blue-mid)}.seg-card.p2 .seg-tier{color:#A78BFA}.seg-card.p3 .seg-tier{color:var(--green)}
+.seg-card h4{font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px}
+.seg-card p{font-size:12px;color:var(--text3);line-height:1.6}
+.seg-jtbd{margin-top:9px;font-size:11px;font-weight:500;color:var(--text2);padding:7px 9px;background:rgba(255,255,255,.04);border-radius:var(--r);border-left:2px solid var(--border2)}
+.journey{position:relative;margin:24px 0}
+.journey-line{position:absolute;left:18px;top:36px;bottom:36px;width:1px;background:var(--border)}
+.j-step{display:flex;gap:18px;align-items:flex-start;padding:10px 0}
+.j-dot{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--border);background:var(--surface);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--text3);position:relative;z-index:1}
+.j-dot.active{background:var(--blue);border-color:var(--blue);color:#fff}
+.j-dot.friction{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.3);color:#EF4444}
+.j-content h4{font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px}
+.j-content p{font-size:11px;color:var(--text3);line-height:1.6}
+.j-tag{display:inline-block;margin-top:5px;font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.8px;padding:2px 7px;border-radius:3px}
+.tag-d{background:var(--green-bg);color:var(--green)}.tag-f{background:var(--red-bg);color:var(--red)}.tag-n{background:rgba(255,255,255,.05);color:var(--text3);border:1px solid var(--border)}
+.feature-table{width:100%;border-collapse:collapse;font-size:12.5px;margin:18px 0}
+.feature-table th{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);padding:9px 13px;border-bottom:1px solid var(--border2);text-align:left;background:var(--bg)}
+.feature-table td{padding:12px 13px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.feature-table tr:last-child td{border-bottom:none}
+.feature-table tbody tr:hover td{background:rgba(27,110,243,.04)}
+.fname{font-weight:500;color:var(--text)}
+.pill{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:500;white-space:nowrap}
+.pill-s{background:var(--green-bg);color:var(--green)}.pill-m{background:var(--amber-bg);color:var(--amber)}.pill-w{background:var(--red-bg);color:var(--red)}
+.tab-nav{display:flex;border-bottom:1px solid var(--border2);margin-bottom:0}
+.tab-btn{padding:9px 16px;font-size:12px;font-weight:500;color:var(--text3);background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer;font-family:"Inter",sans-serif;transition:color .2s,border-color .2s}
+.tab-btn.active{color:var(--blue-mid);border-bottom-color:var(--blue)}
+.tab-panel{display:none}.tab-panel.active{display:block}
+.moat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0}
+.moat-card{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:0 var(--r-lg) var(--r-lg) 0;padding:16px 18px}
+.moat-card.dim{border-left-color:var(--border2)}
+.moat-card h4{font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px}
+.moat-card p{font-size:11px;color:var(--text3);line-height:1.65}
+.comp-wrap{overflow-x:auto;margin:20px 0}
+.comp-table{width:100%;border-collapse:collapse;font-size:12px}
+.comp-table th{padding:9px 16px;font-size:9px;font-weight:600;text-align:center;border-bottom:1px solid var(--border2);background:var(--bg);color:var(--text3)}
+.comp-table th.hl{background:var(--blue);color:#fff;border-bottom-color:var(--blue)}
+.comp-table td{padding:10px 16px;text-align:center;border-bottom:1px solid var(--border);color:var(--text2)}
+.comp-table td:first-child{text-align:left;font-weight:500;color:var(--text)}
+.comp-table td.hl{background:var(--blue-pale);color:var(--blue-mid);font-weight:500}
+.comp-table tr:last-child td{border-bottom:none}
+.c-yes{color:var(--green)}.c-no{color:var(--red)}.c-part{color:var(--amber)}
+.opp-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0}
+.opp-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px;transition:border-color .2s}
+.opp-card:hover{border-color:var(--blue-border)}
+.opp-num{font-family:"Spectral",serif;font-size:40px;font-weight:700;color:rgba(27,110,243,.1);line-height:1;margin-bottom:4px}
+.opp-card h4{font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px}
+.opp-card p{font-size:11px;color:var(--text3);line-height:1.7}
+.opp-impact{margin-top:9px;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;font-weight:500;color:var(--blue-mid)}
+.verdict-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0}
+.verdict-box{border-radius:var(--r-lg);padding:20px}
+.verdict-box.strengths{background:var(--green-bg);border:1px solid rgba(16,185,129,.2)}
+.verdict-box.weaknesses{background:var(--red-bg);border:1px solid rgba(239,68,68,.2)}
+.verdict-box-title{font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:600;margin-bottom:10px}
+.verdict-box.strengths .verdict-box-title{color:var(--green)}
+.verdict-box.weaknesses .verdict-box-title{color:var(--red)}
+.verdict-box ul{padding-left:14px}
+.verdict-box li{font-size:12px;line-height:1.8;color:var(--text2)}
+.rating-rows{margin:14px 0}
+.rating-row{display:flex;align-items:center;gap:12px;margin-bottom:9px}
+.rating-label{font-size:12px;color:var(--text2);width:220px;flex-shrink:0}
+.rating-track{flex:1;height:5px;background:var(--surface2);border-radius:3px;overflow:hidden}
+.rating-fill{height:100%;border-radius:3px;background:var(--blue);transition:width 1.2s ease}
+.rating-score{width:30px;font-size:12px;font-weight:500;color:var(--text);text-align:right;flex-shrink:0}
+.summary-strip{background:var(--bg2);border-top:1px solid var(--border);display:flex;gap:48px;align-items:center;padding:26px 60px}
+.s-label{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--text3);margin-bottom:3px}
+.s-val{font-family:"Spectral",serif;font-size:20px;font-weight:700;color:var(--blue-mid)}
+.s-val.w{color:#fff}
+.img-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0}
+.img-card{border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--border);background:var(--surface)}
+.img-card-cap{padding:8px 11px;font-size:11px;color:var(--text3);border-top:1px solid var(--border)}
+.img-card-cap strong{color:var(--text2);font-weight:500}
+.footer{background:var(--bg);padding:32px 60px;font-size:12px;color:var(--text3);border-top:1px solid var(--border)}
+.footer-grid{max-width:1080px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-start;gap:36px}
+.footer-brand{font-family:"Spectral",serif;font-size:17px;font-weight:700;color:var(--blue-mid);margin-bottom:4px}
+.footer a{color:var(--blue-mid)}
+.client-strip{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0}
+.client-tag{font-size:10px;padding:3px 8px;border:1px solid var(--border2);color:var(--text3);border-radius:3px}
+.spacer-sm{height:14px}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+@media(max-width:900px){
+  .cover{grid-template-columns:1fr}.cover-right{display:none}.cover h1{font-size:32px}
+  .page{padding:0 22px}.stats-band{grid-template-columns:repeat(3,1fr)}
+  .arch-grid,.two-col,.seg-grid{grid-template-columns:1fr}
+  .opp-grid,.moat-grid,.verdict-grid,.img-grid{grid-template-columns:1fr}
+  .toc-bar{padding:0 22px}.footer{padding:26px 22px}.footer-grid{flex-direction:column;gap:18px}
+  .summary-strip{padding:18px 22px;gap:20px;flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-left">
+    <div>
+      <div class="cover-tag"><span class="cover-tag-dot"></span>PM Portfolio &middot; Product Teardown</div>
+      <h1>Maropost<br>Marketing Cloud:<br><em>Built for Ecommerce.</em><br><em>Built to Scale.</em></h1>
+      <p class="cover-sub">A 9-section product teardown written from 11 months inside Maropost as a Client Support Specialist &mdash; cross-referenced with G2 Winter 2025 Reports, Deloitte Fast 500 recognition, and published case study results from Mercedes-Benz, BioTrust Nutrition, and REDEF Group.</p>
+    </div>
+    <div class="cover-meta">
+      <div class="meta-item"><span>Author</span><span>Shiwal Singh</span></div>
+      <div class="meta-item"><span>Context</span><span>Client Support Specialist, Maropost 2023&ndash;24</span></div>
+      <div class="meta-item"><span>Domain</span><span>B2B SaaS &middot; Email Marketing &middot; Ecommerce Automation</span></div>
+      <div class="meta-item"><span>Portfolio</span><span>shiwal50.github.io/portfolio</span></div>
+    </div>
+  </div>
+  <div class="cover-right">
+    <svg viewBox="0 0 520 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;position:absolute;inset:0" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <linearGradient id="cgl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0C1220"/><stop offset=".35" stop-color="#0C1220" stop-opacity="0"/></linearGradient>
+        <linearGradient id="cgb" x1="0" y1="0" x2="0" y2="1"><stop offset=".6" stop-color="#0C1220" stop-opacity="0"/><stop offset="1" stop-color="#0C1220"/></linearGradient>
+      </defs>
+      <rect width="520" height="520" fill="#090E18"/>
+      <line x1="0" y1="52" x2="520" y2="52" stroke="rgba(27,110,243,.05)" stroke-width="1"/>
+      <line x1="0" y1="104" x2="520" y2="104" stroke="rgba(27,110,243,.05)" stroke-width="1"/>
+      <line x1="0" y1="156" x2="520" y2="156" stroke="rgba(27,110,243,.05)" stroke-width="1"/>
+      <line x1="0" y1="208" x2="520" y2="208" stroke="rgba(27,110,243,.05)" stroke-width="1"/>
+      <line x1="0" y1="260" x2="520" y2="260" stroke="rgba(27,110,243,.05)" stroke-width="1"/>
+      <line x1="0" y1="312" x2="520" y2="312" stroke="rgba(27,110,243,.05)" stroke-width="1"/>
+      <line x1="52" y1="0" x2="52" y2="520" stroke="rgba(27,110,243,.05)" stroke-width="1"/>
+      <line x1="104" y1="0" x2="104" y2="520" stroke="rgba(27,110,243,.05)" stroke-width="1"/>
+      <line x1="156" y1="0" x2="156" y2="520" stroke="rgba(27,110,243,.05)" stroke-width="1"/>
+      <line x1="208" y1="0" x2="208" y2="520" stroke="rgba(27,110,243,.05)" stroke-width="1"/>
+      <line x1="260" y1="0" x2="260" y2="520" stroke="rgba(27,110,243,.05)" stroke-width="1"/>
+      <line x1="312" y1="0" x2="312" y2="520" stroke="rgba(27,110,243,.05)" stroke-width="1"/>
+      <ellipse cx="320" cy="260" rx="200" ry="160" fill="rgba(27,110,243,.07)"/>
+      <rect x="40" y="40" width="440" height="300" rx="10" fill="#111827" stroke="rgba(27,110,243,.2)" stroke-width="1"/>
+      <rect x="40" y="40" width="440" height="30" rx="10" fill="#0C1220"/>
+      <rect x="40" y="60" width="440" height="10" fill="#0C1220"/>
+      <circle cx="58" cy="55" r="5" fill="#FF5F57"/><circle cx="76" cy="55" r="5" fill="#FEBC2E"/><circle cx="94" cy="55" r="5" fill="#28C840"/>
+      <text x="110" y="59" font-family="monospace" font-size="8" fill="rgba(255,255,255,.2)">app.maropost.com &mdash; Marketing Cloud</text>
+      <rect x="40" y="70" width="78" height="270" fill="#0A0E18"/>
+      <rect x="48" y="82" width="62" height="20" rx="4" fill="#1B6EF3"/>
+      <text x="79" y="96" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#fff">Campaigns</text>
+      <text x="79" y="116" text-anchor="middle" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.3)">Journeys</text>
+      <text x="79" y="136" text-anchor="middle" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.3)">Contacts</text>
+      <text x="79" y="156" text-anchor="middle" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.3)">Reports</text>
+      <text x="79" y="176" text-anchor="middle" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.3)">A/B Tests</text>
+      <text x="79" y="196" text-anchor="middle" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.3)">SMS</text>
+      <text x="79" y="216" text-anchor="middle" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.3)">Segments</text>
+      <text x="79" y="236" text-anchor="middle" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.3)">Settings</text>
+      <rect x="130" y="78" width="76" height="42" rx="5" fill="rgba(16,185,129,.08)" stroke="rgba(16,185,129,.2)" stroke-width="1"/>
+      <text x="168" y="94" text-anchor="middle" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.35)">DELIVERED</text>
+      <text x="168" y="110" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#10B981">98.1%</text>
+      <rect x="214" y="78" width="76" height="42" rx="5" fill="rgba(27,110,243,.08)" stroke="rgba(27,110,243,.2)" stroke-width="1"/>
+      <text x="252" y="94" text-anchor="middle" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.35)">OPEN RATE</text>
+      <text x="252" y="110" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#4B8FF5">34.2%</text>
+      <rect x="298" y="78" width="76" height="42" rx="5" fill="rgba(245,158,11,.08)" stroke="rgba(245,158,11,.2)" stroke-width="1"/>
+      <text x="336" y="94" text-anchor="middle" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.35)">LINK CTR</text>
+      <text x="336" y="110" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#F59E0B">6.8%</text>
+      <rect x="382" y="78" width="90" height="42" rx="5" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+      <text x="427" y="94" text-anchor="middle" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.35)">REVENUE</text>
+      <text x="427" y="110" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#fff">$41.2k</text>
+      <rect x="130" y="130" width="180" height="100" rx="5" fill="rgba(255,255,255,.03)"/>
+      <text x="142" y="148" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.25)" letter-spacing="1">DELIVERY REPORT</text>
+      <text x="142" y="166" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.5)">Delivered</text>
+      <rect x="198" y="158" width="100" height="6" rx="2" fill="rgba(255,255,255,.06)"/>
+      <rect x="198" y="158" width="98" height="6" rx="2" fill="#10B981"/>
+      <text x="142" y="184" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.5)">Opened</text>
+      <rect x="198" y="176" width="100" height="6" rx="2" fill="rgba(255,255,255,.06)"/>
+      <rect x="198" y="176" width="54" height="6" rx="2" fill="#4B8FF5"/>
+      <text x="142" y="202" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.5)">Clicked</text>
+      <rect x="198" y="194" width="100" height="6" rx="2" fill="rgba(255,255,255,.06)"/>
+      <rect x="198" y="194" width="14" height="6" rx="2" fill="#F59E0B"/>
+      <text x="142" y="220" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.5)">Bounced</text>
+      <rect x="198" y="212" width="100" height="6" rx="2" fill="rgba(255,255,255,.06)"/>
+      <rect x="198" y="212" width="4" height="6" rx="2" fill="#EF4444"/>
+      <rect x="320" y="130" width="152" height="100" rx="5" fill="rgba(255,255,255,.03)"/>
+      <text x="332" y="148" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.25)" letter-spacing="1">SEGMENTS</text>
+      <rect x="328" y="154" width="136" height="18" rx="3" fill="rgba(27,110,243,.15)" stroke="rgba(27,110,243,.3)" stroke-width="1"/>
+      <text x="396" y="166" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#4B8FF5">VIPs &mdash; eRFM 8.9</text>
+      <text x="332" y="186" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.4)">2,841 contacts matched</text>
+      <rect x="328" y="194" width="136" height="18" rx="3" fill="rgba(245,158,11,.1)" stroke="rgba(245,158,11,.25)" stroke-width="1"/>
+      <text x="396" y="206" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#F59E0B">At-Risk &mdash; 30d no open</text>
+      <text x="332" y="220" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.4)">14,322 contacts matched</text>
+      <rect x="70" y="356" width="390" height="150" rx="8" fill="#0D1422" stroke="rgba(27,110,243,.15)" stroke-width="1"/>
+      <rect x="70" y="356" width="390" height="26" rx="8" fill="#080C16"/>
+      <rect x="70" y="372" width="390" height="10" fill="#080C16"/>
+      <circle cx="86" cy="369" r="4" fill="#FF5F57"/><circle cx="100" cy="369" r="4" fill="#FEBC2E"/><circle cx="114" cy="369" r="4" fill="#28C840"/>
+      <text x="126" y="373" font-family="monospace" font-size="8" fill="rgba(255,255,255,.2)">Journey Builder &mdash; Schedule years ahead</text>
+      <rect x="215" y="390" width="100" height="22" rx="5" fill="#1B6EF3"/>
+      <text x="265" y="405" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#fff">Cart Abandoned</text>
+      <line x1="265" y1="412" x2="265" y2="424" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
+      <rect x="205" y="424" width="120" height="22" rx="5" fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
+      <text x="265" y="439" text-anchor="middle" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.65)">Wait 1 hour</text>
+      <line x1="265" y1="446" x2="265" y2="458" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
+      <rect x="205" y="458" width="120" height="22" rx="5" fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
+      <text x="265" y="473" text-anchor="middle" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.65)">Send personalised email</text>
+      <line x1="265" y1="480" x2="265" y2="492" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
+      <rect x="193" y="492" width="144" height="22" rx="5" fill="rgba(27,110,243,.15)" stroke="rgba(27,110,243,.35)" stroke-width="1"/>
+      <text x="265" y="507" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#4B8FF5">Opened? &rarr; SMS or follow-up</text>
+      <rect width="520" height="520" fill="url(#cgl)"/>
+      <rect width="520" height="520" fill="url(#cgb)"/>
+    </svg>
+  </div>
+</div>
+
+<!-- STATS BAND -->
+<div class="stats-band">
+  <div class="stat-item"><div class="stat-val blue">5,000+</div><div class="stat-label">Global brand customers</div></div>
+  <div class="stat-item"><div class="stat-val">98%</div><div class="stat-label">Email deliverability rate</div></div>
+  <div class="stat-item"><div class="stat-val blue">71</div><div class="stat-label">G2 Winter 2025 badges</div></div>
+  <div class="stat-item"><div class="stat-val">$279/mo</div><div class="stat-label">Essential plan starting price</div></div>
+  <div class="stat-item"><div class="stat-val blue">2011</div><div class="stat-label">Founded &middot; Toronto, Canada</div></div>
+</div>
+
+<!-- TOC -->
+<nav class="toc-bar">
+  <a class="toc-link" href="#overview"><span class="toc-num">01</span> Overview</a>
+  <a class="toc-link" href="#users"><span class="toc-num">02</span> Users</a>
+  <a class="toc-link" href="#journey"><span class="toc-num">03</span> Journey</a>
+  <a class="toc-link" href="#features"><span class="toc-num">04</span> Features</a>
+  <a class="toc-link" href="#ui"><span class="toc-num">05</span> UI Teardown</a>
+  <a class="toc-link" href="#moat"><span class="toc-num">06</span> Moat</a>
+  <a class="toc-link" href="#competitors"><span class="toc-num">07</span> Competitors</a>
+  <a class="toc-link" href="#gaps"><span class="toc-num">08</span> Opportunities</a>
+  <a class="toc-link" href="#verdict"><span class="toc-num">09</span> Verdict</a>
+</nav>
+
+<div class="page">
+
+<!-- 01 OVERVIEW -->
+<div class="section" id="overview">
+  <div class="eyebrow">01 &mdash; Product Overview</div>
+  <div class="section-title">What Maropost Marketing Cloud Actually Is</div>
+  <div class="section-desc">Not a generic email tool. A multichannel marketing automation platform purpose-built for mid-market ecommerce and retail brands &mdash; with enterprise-grade deliverability, deep segmentation, and automation depth that most ESPs cannot match at this price point.</div>
+  <div class="two-col">
+    <div>
+      <p class="prose">Maropost was founded in 2011 by Ross Andrew Paquette and Jagdeep Singh in Toronto, Canada. The founding product was a high-volume email delivery engine &mdash; built for scale, reliability, and inbox placement at a time when most ESPs were optimising for ease of use over deliverability infrastructure. That DNA still runs through everything Marketing Cloud does today.</p>
+      <p class="prose" style="margin-top:14px">Marketing Cloud is the flagship of a broader Maropost Unified Commerce Platform that now includes Commerce Cloud, Service Cloud, Retail Cloud, Merchandising Cloud, and Da Vinci AI. But Marketing Cloud is what 5,000+ global brands actually buy Maropost for. It handles email, SMS, and Meta ad campaigns from a single interface &mdash; unified segmentation, shared contact database, single reporting view.</p>
+      <p class="prose" style="margin-top:14px">The platform has been recognised on <strong>Deloitte&apos;s Technology Fast 500 multiple consecutive years</strong> and earned G2&apos;s &quot;High Performer,&quot; &quot;Easiest to Use,&quot; and &quot;Users Love Us&quot; badges across <strong>71 categories in the Winter 2025 Report</strong> &mdash; including nine mid-market-specific badges. Pricing is transparent on the Essential tier at <strong>$279/month</strong>; Professional ($849/month, adds dedicated Success Manager and Deliverability Manager) and Enterprise ($1,699/month, adds AI features and unlimited journeys) are on published tiers. All plans are based on send volume, not contact count.</p>
+      <div class="pullquote" style="margin-top:20px">
+        <p>&quot;Our guiding principle is &apos;the best or nothing&apos; &mdash; and Maropost delivers on that promise.&quot;</p>
+        <cite>Kelly Seawright, Manager of Digital Platforms &mdash; Mercedes-Benz Canada</cite>
+      </div>
+    </div>
+    <div>
+      <div class="mockup-frame">
+        <div class="mockup-bar">
+          <div class="m-dot" style="background:#FF5F57"></div>
+          <div class="m-dot" style="background:#FEBC2E"></div>
+          <div class="m-dot" style="background:#28C840"></div>
+          <span>Campaign Report &mdash; Delivery + Revenue + Link Tracking</span>
+        </div>
+        <svg viewBox="0 0 480 200" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;background:#0D1322">
+          <rect width="480" height="200" fill="#0D1322"/>
+          <text x="14" y="22" font-family="sans-serif" font-size="9" font-weight="bold" fill="rgba(255,255,255,.7)">Summer Campaign &mdash; Full Delivery Report</text>
+          <rect x="8" y="30" width="106" height="48" rx="4" fill="rgba(16,185,129,.08)" stroke="rgba(16,185,129,.15)" stroke-width="1"/>
+          <text x="61" y="46" text-anchor="middle" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.3)">DELIVERED</text>
+          <text x="61" y="64" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#10B981">98.1%</text>
+          <text x="61" y="75" text-anchor="middle" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.2)">243,900 / 248,600</text>
+          <rect x="122" y="30" width="106" height="48" rx="4" fill="rgba(27,110,243,.08)" stroke="rgba(27,110,243,.15)" stroke-width="1"/>
+          <text x="175" y="46" text-anchor="middle" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.3)">OPEN RATE</text>
+          <text x="175" y="64" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#4B8FF5">34.2%</text>
+          <text x="175" y="75" text-anchor="middle" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.2)">time + device tracked</text>
+          <rect x="236" y="30" width="106" height="48" rx="4" fill="rgba(245,158,11,.08)" stroke="rgba(245,158,11,.15)" stroke-width="1"/>
+          <text x="289" y="46" text-anchor="middle" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.3)">LINK CTR</text>
+          <text x="289" y="64" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#F59E0B">6.8%</text>
+          <text x="289" y="75" text-anchor="middle" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.2)">per-link breakdown</text>
+          <rect x="350" y="30" width="122" height="48" rx="4" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+          <text x="411" y="46" text-anchor="middle" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.3)">REVENUE GENERATED</text>
+          <text x="411" y="64" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#fff">$41,240</text>
+          <text x="411" y="75" text-anchor="middle" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.2)">orders + response rate</text>
+          <text x="14" y="102" font-family="sans-serif" font-size="8" font-weight="bold" fill="rgba(255,255,255,.5)">Per-Link Click Tracking</text>
+          <rect x="8" y="108" width="464" height="13" rx="2" fill="rgba(255,255,255,.04)"/>
+          <text x="16" y="118" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.2)" letter-spacing="1">URL</text>
+          <text x="280" y="118" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.2)">CLICKS</text>
+          <text x="360" y="118" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.2)">CTR</text>
+          <text x="430" y="118" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.2)">UNIQUE</text>
+          <line x1="8" y1="124" x2="472" y2="124" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+          <text x="16" y="137" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.65)">/summer-sale</text>
+          <text x="280" y="137" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.5)">4,182</text>
+          <text x="360" y="137" font-family="sans-serif" font-size="8" fill="#10B981">3.4%</text>
+          <text x="430" y="137" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.4)">3,741</text>
+          <line x1="8" y1="143" x2="472" y2="143" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+          <text x="16" y="156" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.65)">/product/bestseller</text>
+          <text x="280" y="156" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.5)">2,890</text>
+          <text x="360" y="156" font-family="sans-serif" font-size="8" fill="#4B8FF5">2.3%</text>
+          <text x="430" y="156" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.4)">2,610</text>
+          <line x1="8" y1="162" x2="472" y2="162" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+          <text x="16" y="175" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.65)">/cart/checkout</text>
+          <text x="280" y="175" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.5)">1,402</text>
+          <text x="360" y="175" font-family="sans-serif" font-size="8" fill="#F59E0B">1.1%</text>
+          <text x="430" y="175" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.4)">1,230</text>
+          <text x="14" y="196" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.15)">Reports also show: when and where emails were opened, device type, total orders, response rates per campaign</text>
+        </svg>
+      </div>
+      <p class="mockup-caption">Delivery rate, open rate, per-link CTR, revenue, and orders &mdash; all in one campaign report view</p>
+      <div class="spacer-sm"></div>
+      <div style="font-size:10px;color:var(--text3);margin-bottom:7px;letter-spacing:1px;text-transform:uppercase">Trusted by</div>
+      <div class="client-strip">
+        <span class="client-tag">Mercedes-Benz</span><span class="client-tag">Fujifilm</span><span class="client-tag">Seiko</span>
+        <span class="client-tag">Luxottica</span><span class="client-tag">Victoria Beckham</span><span class="client-tag">Scripps Media</span>
+        <span class="client-tag">UNTUCKit</span><span class="client-tag">BioTrust Nutrition</span><span class="client-tag">REDEF Group</span>
+        <span class="client-tag">Intersport</span><span class="client-tag">Sandro Paris</span><span class="client-tag">Blue Bell Creameries</span>
+      </div>
+    </div>
+  </div>
+  <div class="spacer-sm"></div>
+  <div class="arch-grid">
+    <div class="arch-card"><div class="arch-icon">&#128231;</div><h4>Email Marketing Engine</h4><p>Drag-and-drop + HTML builder. Dynamic content blocks, personalisation tokens, Smart A/B testing, optimal send-time suggestions. Built for brands sending hundreds of thousands to millions per month.</p><div class="arch-tag">Core product</div></div>
+    <div class="arch-card"><div class="arch-icon">&#128202;</div><h4>Reporting &amp; Delivery Analytics</h4><p>Full delivery reports: sent, delivered, opened (time + device), bounced, unsubscribed, per-link CTR, revenue generated, total orders, response rates. Deliverability Score and Spam Checker built in.</p><div class="arch-tag">Strong differentiator</div></div>
+    <div class="arch-card"><div class="arch-icon">&#128506;</div><h4>Journey Builder (Automation)</h4><p>Visual canvas for multi-step journeys. Unlimited branching logic, multi-channel triggers. Brands can plan and schedule journeys years in advance. Abandoned cart, win-back, post-purchase all supported.</p><div class="arch-tag">Primary stickiness</div></div>
+    <div class="arch-card"><div class="arch-icon">&#127919;</div><h4>Segmentation &amp; eRFM AI</h4><p>Demographic, behavioural, purchase, and email engagement data combined. AI-powered eRFM scoring (Recency, Frequency, Monetary, Email engagement) launched Dec 2024. No manual tagging required.</p><div class="arch-tag">AI &mdash; Dec 2024</div></div>
+    <div class="arch-card"><div class="arch-icon">&#128241;</div><h4>SMS + Meta Ad Campaigns</h4><p>Native SMS campaigns alongside email from a shared contact database. Meta ad campaign management built in &mdash; push eRFM segments directly to Facebook/Instagram audiences. Unified reporting across all channels.</p><div class="arch-tag">Multichannel</div></div>
+    <div class="arch-card"><div class="arch-icon">&#129514;</div><h4>Smart A/B Testing</h4><p>Auto-selects the winning campaign variant based on mixed engagement metrics or pure conversion &mdash; not just open rate. Unique positioning claim: no other platform at this price tier matches this approach.</p><div class="arch-tag">Unique capability</div></div>
+  </div>
+</div>
+
+<!-- 02 USERS -->
+<div class="section" id="users">
+  <div class="eyebrow">02 &mdash; User Segments</div>
+  <div class="section-title">Three Users, Three Very Different Definitions of Success</div>
+  <div class="section-desc">Marketing Cloud&apos;s three customer types share the same platform but have entirely different metrics for success &mdash; and different tolerances for complexity.</div>
+  <div class="seg-grid">
+    <div class="seg-card p1">
+      <div class="seg-tier">Tier 1 &mdash; Core Target Customer</div>
+      <h4>Mid-Market Ecommerce Brand</h4>
+      <p>$20M&ndash;$200M revenue. Marketing team of 2&ndash;5. Sends 500K&ndash;5M emails/month. Migrating from Mailchimp (too basic) or Klaviyo (too expensive after February 2025 profile-based pricing shift). Needs deliverability, automation depth, and revenue attribution in one platform.</p>
+      <div class="seg-jtbd">JTBD: Drive repeat purchases from my list without a dedicated email team or Klaviyo&apos;s pricing</div>
+    </div>
+    <div class="seg-card p2">
+      <div class="seg-tier">Tier 2 &mdash; High LTV Enterprise</div>
+      <h4>Large Publisher / Enterprise Brand</h4>
+      <p>100M+ emails/month. Mercedes-Benz Canada achieved 4&times; industry open rates on Maropost. REDEF Group saw 200% YoY growth in email revenue. BioTrust Nutrition increased open rates 33%. These brands need dedicated IP infrastructure and deliverability managers &mdash; both available on Professional/Enterprise.</p>
+      <div class="seg-jtbd">JTBD: Send at massive scale with guaranteed deliverability and hands-on expert support</div>
+    </div>
+    <div class="seg-card p3">
+      <div class="seg-tier">Tier 3 &mdash; Agency / Multi-Brand</div>
+      <h4>Email Marketing Agency</h4>
+      <p>Agencies managing multiple brand accounts. G2 five-year reviewers note they have moved &quot;several clients&quot; to Maropost specifically for the segmentation depth and 24/7 support. Multi-account management is actively used but underbuilt as a formal feature &mdash; no unified agency dashboard exists.</p>
+      <div class="seg-jtbd">JTBD: Manage 10+ client email programs with one platform and a support team that responds at 2am</div>
+    </div>
+  </div>
+  <div class="callout" data-label="Insider Observation" style="margin-top:28px">
+    <p>From 11 months inside client accounts: the mid-market ecommerce segment was the most engaged &mdash; they used Journey Builder, segmentation, and reporting actively. The most common support need was not platform errors but configuration complexity: setting up custom field mappings correctly on import, building first journeys from scratch, and understanding how segments feed into scheduled campaigns. <strong>The platform&apos;s power is real. The path to that power is where clients needed the most hand-holding.</strong></p>
+  </div>
+</div>
+
+<!-- 03 JOURNEY -->
+<div class="section" id="journey">
+  <div class="eyebrow">03 &mdash; User Journey</div>
+  <div class="section-title">Onboarding to First Revenue Campaign</div>
+  <div class="section-desc">From account setup to a live, segmented, revenue-generating campaign &mdash; annotated with delight moments and friction points from direct client observation.</div>
+  <div class="two-col">
+    <div class="journey">
+      <div class="journey-line"></div>
+      <div class="j-step">
+        <div class="j-dot active">1</div>
+        <div class="j-content"><h4>Account setup &amp; domain authentication</h4><p>SPF, DKIM, DMARC required before sending. CSM-led onboarding on Professional and Enterprise plans. Domain auth is a prerequisite for deliverability &mdash; non-negotiable but blocks non-technical teams without guidance.</p><span class="j-tag tag-n">Mixed &mdash; CSM onboarding excellent; technical config blocks lean teams</span></div>
+      </div>
+      <div class="j-step">
+        <div class="j-dot active">2</div>
+        <div class="j-content"><h4>Contact import &amp; custom field mapping</h4><p>CSV import or API sync. Supports up to 150 custom fields on Enterprise. Powerful for complex brands but no smart field-matching on import &mdash; mapping is fully manual. First-time users commonly misconfigure custom fields and have to re-import.</p><span class="j-tag tag-n">Mixed &mdash; depth is impressive, setup requires upfront planning</span></div>
+      </div>
+      <div class="j-step">
+        <div class="j-dot active">3</div>
+        <div class="j-content"><h4>Segment contacts for first campaign</h4><p>The real aha moment. eRFM AI scoring surfaces high-value, at-risk, and lapsed customers without manual tagging. Demographic, behavioural, purchase, and engagement data combined into precise, instantly-actionable audience groups.</p><span class="j-tag tag-d">Delight &mdash; eRFM scoring is the platform&apos;s biggest differentiator in action</span></div>
+      </div>
+      <div class="j-step">
+        <div class="j-dot active">4</div>
+        <div class="j-content"><h4>Build and schedule email campaign</h4><p>Drag-and-drop builder with dynamic content and personalisation tokens. Scheduling is flexible &mdash; campaigns can be pre-planned and scheduled months or years ahead via the Journey Builder calendar. Optimal send-time suggestions built in.</p><span class="j-tag tag-d">Delight &mdash; multi-year scheduling is unique and genuinely useful for content-heavy brands</span></div>
+      </div>
+      <div class="j-step">
+        <div class="j-dot active">5</div>
+        <div class="j-content"><h4>Launch and review full delivery report</h4><p>Post-send: real-time delivery %, opened (by time + device), bounced, unsubscribed, per-link CTR, total orders, revenue generated, response rates &mdash; all on one screen. Deliverability Score and Spam Checker flag issues before send. Mercedes-Benz: 4&times; industry open rates.</p><span class="j-tag tag-d">Delight &mdash; reporting depth at this price point is a genuine competitive advantage</span></div>
+      </div>
+      <div class="j-step">
+        <div class="j-dot">6</div>
+        <div class="j-content"><h4>Build automated journey flows</h4><p>Journey Builder: visual canvas, unlimited branching logic, multi-channel triggers across email + SMS + Meta. Abandoned cart, win-back, post-purchase, loyalty sequences all have templates. Power users love the depth. First-timers hit blank-canvas friction immediately.</p><span class="j-tag tag-n">Mixed &mdash; incredibly powerful, steep initial learning curve on first encounter</span></div>
+      </div>
+      <div class="j-step">
+        <div class="j-dot friction">7</div>
+        <div class="j-content"><h4>Scale and A/B optimise</h4><p>Smart A/B auto-selects winners. But at high volume (5M+ sends/month), send-based pricing scales linearly without built-in volume discount in base tiers. High-growth brands begin to feel this &mdash; Enterprise pricing requires negotiation.</p><span class="j-tag tag-f">Friction &mdash; pricing model penalises fast-scaling brands without custom negotiation</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="mockup-frame" style="margin-top:0">
+        <div class="mockup-bar">
+          <div class="m-dot" style="background:#FF5F57"></div>
+          <div class="m-dot" style="background:#FEBC2E"></div>
+          <div class="m-dot" style="background:#28C840"></div>
+          <span>Journey Builder &mdash; Win-Back Automation</span>
+        </div>
+        <svg viewBox="0 0 480 220" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;background:#090E18">
+          <pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,.05)"/></pattern>
+          <rect width="480" height="220" fill="url(#dots)"/>
+          <rect x="0" y="0" width="480" height="26" fill="#070B14"/>
+          <rect x="8" y="6" width="52" height="13" rx="3" fill="#1B6EF3"/><text x="34" y="15.5" text-anchor="middle" font-family="sans-serif" font-size="7" fill="#fff">+ Add Step</text>
+          <rect x="68" y="6" width="52" height="13" rx="3" fill="rgba(255,255,255,.05)"/><text x="94" y="15.5" text-anchor="middle" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.4)">Templates</text>
+          <rect x="128" y="6" width="100" height="13" rx="3" fill="rgba(255,255,255,.05)"/><text x="178" y="15.5" text-anchor="middle" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.4)">Schedule years in advance</text>
+          <text x="410" y="15" font-family="sans-serif" font-size="7" fill="rgba(27,110,243,.7)">2,841 contacts in flow</text>
+          <rect x="186" y="34" width="108" height="24" rx="5" fill="#1B6EF3"/>
+          <text x="240" y="50" text-anchor="middle" font-family="sans-serif" font-size="8" font-weight="bold" fill="#fff">No purchase &mdash; 60 days</text>
+          <line x1="240" y1="58" x2="240" y2="70" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
+          <rect x="180" y="70" width="120" height="22" rx="5" fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+          <text x="240" y="85" text-anchor="middle" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.65)">Send win-back email</text>
+          <line x1="240" y1="92" x2="240" y2="104" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
+          <rect x="180" y="104" width="120" height="22" rx="5" fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+          <text x="240" y="119" text-anchor="middle" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.65)">Wait 3 days</text>
+          <line x1="240" y1="126" x2="240" y2="138" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
+          <rect x="168" y="138" width="144" height="22" rx="5" fill="rgba(27,110,243,.15)" stroke="rgba(27,110,243,.3)" stroke-width="1"/>
+          <text x="240" y="153" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#4B8FF5">Opened? &rarr; Branch</text>
+          <line x1="208" y1="160" x2="140" y2="174" stroke="rgba(16,185,129,.3)" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <text x="78" y="172" font-family="sans-serif" font-size="7" fill="rgba(16,185,129,.7)">YES: 15% discount</text>
+          <rect x="56" y="174" width="96" height="20" rx="4" fill="rgba(16,185,129,.08)" stroke="rgba(16,185,129,.2)" stroke-width="1"/>
+          <text x="104" y="188" text-anchor="middle" font-family="sans-serif" font-size="7" fill="#10B981">Personalised offer</text>
+          <line x1="272" y1="160" x2="338" y2="174" stroke="rgba(245,158,11,.3)" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <text x="308" y="172" font-family="sans-serif" font-size="7" fill="rgba(245,158,11,.7)">NO: SMS nudge</text>
+          <rect x="320" y="174" width="96" height="20" rx="4" fill="rgba(245,158,11,.08)" stroke="rgba(245,158,11,.2)" stroke-width="1"/>
+          <text x="368" y="188" text-anchor="middle" font-family="sans-serif" font-size="7" fill="#F59E0B">SMS reminder</text>
+          <text x="14" y="212" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.2)">Journeys can be pre-planned and scheduled months or years in advance &mdash; unique to Maropost among ESPs at this price tier</text>
+        </svg>
+      </div>
+      <p class="mockup-caption">Journey Builder &mdash; ecommerce automation with multi-year scheduling and SMS/email branching</p>
+      <div class="callout" data-label="Journey Insight" style="margin-top:18px">
+        <p>From client support experience: the Journey Builder&apos;s multi-year scheduling capability &mdash; one of the platform&apos;s most unique features &mdash; was consistently underdiscovered by new accounts. Most brands only learned about it weeks after onboarding. Better in-product feature discovery at setup would materially increase time-to-value for content-heavy and seasonal brands.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 04 FEATURES -->
+<div class="section" id="features">
+  <div class="eyebrow">04 &mdash; Feature Audit</div>
+  <div class="section-title">Feature-by-Feature Maturity Assessment</div>
+  <div class="section-desc">Evaluated across functional completeness, UX quality, and real-world reliability. Based on direct platform experience, G2 Winter 2025 data, and published case study results.</div>
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab(this,&apos;core&apos;)">Core Platform</button>
+    <button class="tab-btn" onclick="switchTab(this,&apos;reporting&apos;)">Reporting &amp; Delivery</button>
+    <button class="tab-btn" onclick="switchTab(this,&apos;channels&apos;)">Channels &amp; Automation</button>
+  </div>
+  <div id="tab-core" class="tab-panel active">
+    <table class="feature-table">
+      <thead><tr><th>Feature</th><th>Maturity</th><th>Assessment</th></tr></thead>
+      <tbody>
+        <tr><td><span class="fname">Email Campaign Builder</span></td><td><span class="pill pill-s">Strong</span></td><td>Drag-and-drop + HTML editor + dynamic content blocks + personalisation tokens. Scheduling and automation integrated. No coding required for most use cases. G2 &quot;Easiest to Use&quot; Winter 2025. Best-in-class reliability at high send volumes.</td></tr>
+        <tr><td><span class="fname">Journey Builder (Automation)</span></td><td><span class="pill pill-s">Strong</span></td><td>Visual canvas with unlimited branching logic, multi-channel triggers, waits, and conditions. Brands can plan and schedule journeys years in advance. G2 reviewers call it &quot;incredibly powerful &mdash; features I haven&apos;t seen in other ESPs.&quot; Steep first encounter for new users.</td></tr>
+        <tr><td><span class="fname">Contact Segmentation</span></td><td><span class="pill pill-s">Strong</span></td><td>Demographic, website actions, purchase behaviour, mobile engagement, and custom activity tracking combined into precise segments. GDPR-compliant suppression lists and subscriber management built in. Up to 150 custom fields on Enterprise.</td></tr>
+        <tr><td><span class="fname">eRFM AI Scoring (Dec 2024)</span></td><td><span class="pill pill-s">Strong</span></td><td>AI-powered scoring across Recency, Frequency, Monetary value, and Email engagement. Surfaces VIPs, at-risk, and lapsed customers without manual tagging. Most defensible new feature on the platform &mdash; not easily replicated at this price tier.</td></tr>
+        <tr><td><span class="fname">Smart A/B Testing</span></td><td><span class="pill pill-s">Strong</span></td><td>Auto-selects winning campaign variant based on mixed engagement metrics or pure conversion &mdash; not just open rate. More sophisticated than standard split-testing at any competitor in this tier. Unique positioning claim substantiated in their own product documentation.</td></tr>
+        <tr><td><span class="fname">AI Product Recommendations (Dec 2024)</span></td><td><span class="pill pill-m">Maturing</span></td><td>Auto-populates campaigns with personalised product recommendations from real-time purchase and browsing data. Works best with structured product catalogs. Quality degrades with messy or incomplete product data &mdash; setup hygiene is critical to results.</td></tr>
+        <tr><td><span class="fname">Landing Pages &amp; Acquisition</span></td><td><span class="pill pill-m">Maturing</span></td><td>Drag-and-drop landing pages, lightboxes, web forms, surveys, branded URLs, Facebook and Twitter lead gen forms. Functional for most ecommerce use cases. Template library is limited &mdash; design-forward brands are pushed toward custom HTML.</td></tr>
+        <tr><td><span class="fname">API &amp; Integrations</span></td><td><span class="pill pill-s">Strong</span></td><td>REST and GraphQL APIs for custom integrations. Zapier connector for 1,000+ app connections. Native one-click integrations with Shopify, WooCommerce, Stripe. API setup has been flagged as complex in multiple reviews &mdash; assumes technical capability on the client side.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div id="tab-reporting" class="tab-panel">
+    <table class="feature-table">
+      <thead><tr><th>Reporting Capability</th><th>Maturity</th><th>What It Covers</th></tr></thead>
+      <tbody>
+        <tr><td><span class="fname">Delivery Reports</span></td><td><span class="pill pill-s">Strong</span></td><td>Sent, delivered (%), bounced (hard + soft split), unsubscribed, spam complaints &mdash; tracked per campaign in real time. 98% deliverability published on Maropost&apos;s own product page and backed by case study outcomes. Fundamental to the platform&apos;s core value proposition.</td></tr>
+        <tr><td><span class="fname">Open Rate Tracking</span></td><td><span class="pill pill-s">Strong</span></td><td>Open rates tracked by time of day and device type &mdash; enabling intelligent resend strategies and send-time optimisation. Mercedes-Benz Canada case study: 4&times; industry open rates achieved. BioTrust Nutrition: 33% increase in open rates after optimising send cadence.</td></tr>
+        <tr><td><span class="fname">Link &amp; Click Tracking</span></td><td><span class="pill pill-s">Strong</span></td><td>Per-link CTR breakdown within each campaign &mdash; not just aggregate click rate. Unique vs total clicks tracked separately. Enables precise A/B testing of CTA placement and link copy. Marketers can see exactly which links drove engagement in each campaign.</td></tr>
+        <tr><td><span class="fname">Revenue &amp; Orders Reporting</span></td><td><span class="pill pill-s">Strong</span></td><td>Revenue generated, total orders, and response rates tracked per campaign. Managers get a direct line from email send to revenue outcome. One of the clearest differentiators vs tools like Mailchimp that lack native revenue attribution at this reporting depth.</td></tr>
+        <tr><td><span class="fname">Deliverability Score + Spam Checker</span></td><td><span class="pill pill-s">Strong</span></td><td>Pre-send tools: Deliverability Score assesses sender reputation health and flags risks before a campaign goes live; Spam Checker identifies content likely to trigger inbox filters. Available across all plan tiers &mdash; most competitors reserve these for premium tiers.</td></tr>
+        <tr><td><span class="fname">Cohort &amp; Cross-Journey Attribution</span></td><td><span class="pill pill-w">Weak</span></td><td>Not currently available. The platform does not offer cohort analysis by acquisition channel or cross-journey attribution to show which specific journey sequence drove a conversion when a customer touched multiple flows. Power users export to Tableau or Google Sheets to fill this gap.</td></tr>
+        <tr><td><span class="fname">Real-Time Report Refresh</span></td><td><span class="pill pill-m">Maturing</span></td><td>Multiple reviewers on Research.com and TrustRadius note reporting lacks real-time updates in some views during live high-volume campaigns, causing delays in marketing decisions. Not universally reported &mdash; may depend on send volume, plan tier, or report type.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div id="tab-channels" class="tab-panel">
+    <table class="feature-table">
+      <thead><tr><th>Channel / Capability</th><th>Maturity</th><th>Assessment</th></tr></thead>
+      <tbody>
+        <tr><td><span class="fname">Email Marketing (Bulk)</span></td><td><span class="pill pill-s">Strong</span></td><td>Enterprise-grade infrastructure. 98% deliverability. Dedicated IP addresses available as paid add-on. Individual domain reputation management &mdash; good senders are not penalised by others on shared infrastructure. IP warming protocols for new senders.</td></tr>
+        <tr><td><span class="fname">SMS Marketing</span></td><td><span class="pill pill-s">Strong</span></td><td>Native SMS campaigns alongside email from a shared contact database. Full segmentation applies across both channels. SMS-triggered journeys based on subscriber behaviour, revenue thresholds, and link engagement. Scheduling and automation via Journey Builder.</td></tr>
+        <tr><td><span class="fname">Meta Ad Campaigns</span></td><td><span class="pill pill-m">Maturing</span></td><td>Email + SMS + Meta campaigns managed from one dashboard. eRFM segments can be pushed directly to Facebook and Instagram audiences. Integration is functional but shallower than dedicated social ad platforms &mdash; works well for brands that want one dashboard, not deep Meta features.</td></tr>
+        <tr><td><span class="fname">In-App / Mobile Marketing</span></td><td><span class="pill pill-m">Maturing</span></td><td>In-app messages for personalised deals and discounts. In-app event triggers for push notifications. Mobile engagement metrics feed into segmentation. Less prominent in the platform than email and SMS &mdash; feels secondary in the navigation hierarchy.</td></tr>
+        <tr><td><span class="fname">Journey Scheduling (Years Ahead)</span></td><td><span class="pill pill-s">Strong</span></td><td>Brands can plan and schedule automated journeys years in advance. BioTrust Nutrition used this to systematically improve open rates 33% by pre-planning cadence sequences. Most ESPs at this price tier limit scheduling to weeks. Genuinely unique.</td></tr>
+        <tr><td><span class="fname">Web Push Notifications</span></td><td><span class="pill pill-w">Weak</span></td><td>Not natively supported as a standalone channel. Requires third-party integration. A gap vs Dotdigital which offers web push as a standard channel. For ecommerce brands running cart abandonment sequences, a native push channel between email sends would meaningfully improve recovery rates.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 05 UI -->
+<div class="section" id="ui">
+  <div class="eyebrow">05 &mdash; UI Teardown</div>
+  <div class="section-title">Inside the Platform Interface</div>
+  <div class="section-desc">What the dashboard does well, what it doesn&apos;t, and the real friction points from 11 months of direct client support experience.</div>
+  <div class="img-grid">
+    <div class="img-card">
+      <svg viewBox="0 0 480 190" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;background:#0A0E18">
+        <rect width="480" height="190" fill="#0A0E18"/>
+        <rect x="0" y="0" width="480" height="26" fill="#070B14"/>
+        <circle cx="13" cy="13" r="4" fill="#FF5F57"/><circle cx="26" cy="13" r="4" fill="#FEBC2E"/><circle cx="39" cy="13" r="4" fill="#28C840"/>
+        <text x="54" y="17" font-family="monospace" font-size="8" fill="rgba(255,255,255,.2)">Segments &mdash; eRFM + Behavioural Builder</text>
+        <text x="14" y="44" font-family="sans-serif" font-size="9" font-weight="bold" fill="rgba(255,255,255,.7)">Contact Segments</text>
+        <rect x="370" y="32" width="100" height="16" rx="4" fill="#1B6EF3"/><text x="420" y="44" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#fff">+ New Segment</text>
+        <rect x="8" y="52" width="464" height="14" rx="2" fill="rgba(255,255,255,.04)"/>
+        <text x="18" y="62" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.2)" letter-spacing="1">SEGMENT NAME</text>
+        <text x="200" y="62" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.2)">CONTACTS</text>
+        <text x="290" y="62" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.2)">TYPE</text>
+        <text x="390" y="62" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.2)">eRFM SCORE</text>
+        <line x1="8" y1="68" x2="472" y2="68" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+        <text x="18" y="83" font-family="sans-serif" font-size="9" font-weight="bold" fill="rgba(255,255,255,.8)">High-Value VIPs</text>
+        <text x="200" y="83" font-family="sans-serif" font-size="9" fill="rgba(255,255,255,.5)">2,841</text>
+        <text x="290" y="83" font-family="sans-serif" font-size="9" fill="rgba(255,255,255,.4)">eRFM + Purchase</text>
+        <rect x="390" y="75" width="44" height="12" rx="3" fill="rgba(16,185,129,.15)"/><text x="412" y="85" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#10B981">8.9 / 10</text>
+        <line x1="8" y1="92" x2="472" y2="92" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+        <text x="18" y="107" font-family="sans-serif" font-size="9" font-weight="bold" fill="rgba(255,255,255,.8)">At-Risk &mdash; No open 30d</text>
+        <text x="200" y="107" font-family="sans-serif" font-size="9" fill="rgba(255,255,255,.5)">14,322</text>
+        <text x="290" y="107" font-family="sans-serif" font-size="9" fill="rgba(255,255,255,.4)">Behavioural</text>
+        <rect x="390" y="99" width="44" height="12" rx="3" fill="rgba(245,158,11,.15)"/><text x="412" y="109" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#F59E0B">4.2 / 10</text>
+        <line x1="8" y1="116" x2="472" y2="116" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+        <text x="18" y="131" font-family="sans-serif" font-size="9" font-weight="bold" fill="rgba(255,255,255,.8)">Recent Purchasers 30d</text>
+        <text x="200" y="131" font-family="sans-serif" font-size="9" fill="rgba(255,255,255,.5)">5,671</text>
+        <text x="290" y="131" font-family="sans-serif" font-size="9" fill="rgba(255,255,255,.4)">Purchase + Recency</text>
+        <rect x="390" y="123" width="44" height="12" rx="3" fill="rgba(16,185,129,.15)"/><text x="412" y="133" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#10B981">7.4 / 10</text>
+        <line x1="8" y1="140" x2="472" y2="140" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+        <text x="18" y="155" font-family="sans-serif" font-size="9" font-weight="bold" fill="rgba(255,255,255,.8)">Lapsed &mdash; 90d no purchase</text>
+        <text x="200" y="155" font-family="sans-serif" font-size="9" fill="rgba(255,255,255,.5)">31,008</text>
+        <text x="290" y="155" font-family="sans-serif" font-size="9" fill="rgba(255,255,255,.4)">eRFM Monetary</text>
+        <rect x="390" y="147" width="44" height="12" rx="3" fill="rgba(239,68,68,.15)"/><text x="412" y="157" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#EF4444">2.1 / 10</text>
+        <text x="14" y="180" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.15)">4 active segments &middot; 53,842 contacts &middot; Segments feed directly into Journey triggers and campaign scheduling</text>
+      </svg>
+      <div class="img-card-cap"><strong>Segmentation view</strong> &mdash; eRFM scoring surfaces VIP, at-risk, and lapsed contacts without manual tagging</div>
+    </div>
+    <div class="img-card">
+      <svg viewBox="0 0 480 190" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;background:#0A0E18">
+        <rect width="480" height="190" fill="#0A0E18"/>
+        <rect x="0" y="0" width="480" height="26" fill="#070B14"/>
+        <circle cx="13" cy="13" r="4" fill="#FF5F57"/><circle cx="26" cy="13" r="4" fill="#FEBC2E"/><circle cx="39" cy="13" r="4" fill="#28C840"/>
+        <text x="54" y="17" font-family="monospace" font-size="8" fill="rgba(255,255,255,.2)">Reports &mdash; Campaign Analytics</text>
+        <rect x="8" y="32" width="104" height="46" rx="4" fill="rgba(16,185,129,.08)" stroke="rgba(16,185,129,.15)" stroke-width="1"/>
+        <text x="60" y="48" text-anchor="middle" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.3)">DELIVERED</text>
+        <text x="60" y="65" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#10B981">98.1%</text>
+        <text x="60" y="75" text-anchor="middle" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.2)">243,900 sent</text>
+        <rect x="120" y="32" width="104" height="46" rx="4" fill="rgba(27,110,243,.08)" stroke="rgba(27,110,243,.15)" stroke-width="1"/>
+        <text x="172" y="48" text-anchor="middle" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.3)">OPENED</text>
+        <text x="172" y="65" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#4B8FF5">34.2%</text>
+        <text x="172" y="75" text-anchor="middle" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.2)">time + device tracked</text>
+        <rect x="232" y="32" width="104" height="46" rx="4" fill="rgba(245,158,11,.08)" stroke="rgba(245,158,11,.15)" stroke-width="1"/>
+        <text x="284" y="48" text-anchor="middle" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.3)">LINK CTR</text>
+        <text x="284" y="65" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#F59E0B">6.8%</text>
+        <text x="284" y="75" text-anchor="middle" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.2)">per-link breakdown</text>
+        <rect x="344" y="32" width="128" height="46" rx="4" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+        <text x="408" y="48" text-anchor="middle" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.3)">REVENUE</text>
+        <text x="408" y="65" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#fff">$41,240</text>
+        <text x="408" y="75" text-anchor="middle" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.2)">orders + response rate</text>
+        <text x="14" y="100" font-family="sans-serif" font-size="8" font-weight="bold" fill="rgba(255,255,255,.5)">What&apos;s covered &mdash; What&apos;s missing</text>
+        <rect x="8" y="108" width="226" height="68" rx="4" fill="rgba(16,185,129,.05)" stroke="rgba(16,185,129,.1)" stroke-width="1"/>
+        <text x="18" y="122" font-family="sans-serif" font-size="7" fill="rgba(16,185,129,.7)" letter-spacing="1">AVAILABLE</text>
+        <text x="18" y="137" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.5)">&#10003; Delivery / open / click / revenue / orders</text>
+        <text x="18" y="151" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.5)">&#10003; Per-link CTR breakdown</text>
+        <text x="18" y="165" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.5)">&#10003; Deliverability Score + Spam Checker pre-send</text>
+        <rect x="242" y="108" width="230" height="68" rx="4" fill="rgba(239,68,68,.05)" stroke="rgba(239,68,68,.1)" stroke-width="1"/>
+        <text x="252" y="122" font-family="sans-serif" font-size="7" fill="rgba(239,68,68,.7)" letter-spacing="1">GAP</text>
+        <text x="252" y="137" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.4)">&#10007; Cohort analysis by acquisition channel</text>
+        <text x="252" y="151" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.4)">&#10007; Cross-journey attribution</text>
+        <text x="252" y="165" font-family="sans-serif" font-size="8" fill="rgba(255,255,255,.4)">&#10007; Customer LTV projection</text>
+        <text x="14" y="185" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,.15)">Power users export to Tableau or Google Sheets for cohort and cross-journey analysis</text>
+      </svg>
+      <div class="img-card-cap"><strong>Campaign analytics</strong> &mdash; strong delivery and revenue reporting; cohort and cross-journey attribution absent</div>
+    </div>
+  </div>
+  <div class="two-col" style="margin-top:28px">
+    <div>
+      <p class="prose"><strong>What the UI does well:</strong> G2 awarded &quot;Easiest to Use&quot; in Winter 2025 &mdash; and the base campaign interface earns it. The segmentation screen is the platform&apos;s most impressive view: eRFM scores surface complex customer health signals in a format non-technical marketers can act on immediately without SQL or manual tagging. The campaign report page &mdash; delivery, opens, link CTR, revenue, and orders all visible in one view &mdash; is one of the best-executed reporting screens at this price point in the market.</p>
+      <p class="prose" style="margin-top:14px"><strong>The advanced-user tension:</strong> G2 and TrustRadius reviewers consistently note that &quot;features are catered toward advanced or power users &mdash; there is a big learning curve for new users.&quot; The Journey Builder specifically &quot;has a large number of open features which are only limited by the imagination&quot; &mdash; which means a blank canvas for power users and an overwhelming one for first-timers. No guided template appears on first entry.</p>
+    </div>
+    <div>
+      <p class="prose"><strong>Reporting gap:</strong> Multiple reviewers flag that reporting lacks real-time updates in certain views &mdash; causing delays in decision-making during live high-volume campaigns. This is not universally reported but appears consistently enough to indicate a specific platform behaviour at scale rather than an isolated complaint.</p>
+      <p class="prose" style="margin-top:14px"><strong>Pricing transparency:</strong> Multiple G2 reviewers and TrustRadius users flag &quot;custom pricing lacks transparency&quot; as a standalone frustration. Mid-market ecommerce buyers doing platform evaluations benchmark options before speaking to sales. The inability to model costs without a sales call is a friction point that Klaviyo and Mailchimp exploit simply by publishing their prices. The Essential tier at $279/month is published; Professional and Enterprise are not &mdash; which means 80% of the pricing picture requires a conversation.</p>
+    </div>
+  </div>
+  <div class="callout" data-label="UX Observation" style="margin-top:24px">
+    <p>G2&apos;s &quot;Easiest to Use&quot; badge in Winter 2025 and concurrent &quot;steep learning curve&quot; reviews are not contradictory. The base campaign builder and reporting UI genuinely improved &mdash; that badge is real product progress. The Journey Builder and Segmentation tools &mdash; where the real differentiated value lives &mdash; still require significant platform familiarity before a new user can act independently. The gap between &quot;easy to start&quot; and &quot;easy to master&quot; is the product&apos;s primary UX challenge heading into 2025.</p>
+  </div>
+</div>
+
+<!-- 06 MOAT -->
+<div class="section" id="moat">
+  <div class="eyebrow">06 &mdash; Competitive Moat</div>
+  <div class="section-title">Why Brands Stay and Why They Come</div>
+  <div class="section-desc">Maropost&apos;s defensibility is built on deliverability trust, send-based pricing alignment, automation depth, and support quality &mdash; not feature breadth alone.</div>
+  <div class="moat-grid">
+    <div class="moat-card"><h4>98% Deliverability + Dedicated IP Infrastructure</h4><p>Enterprise-grade deliverability is Maropost&apos;s founding DNA. Dedicated IPs (available add-on), individual domain reputation management, IP warming protocols, and dedicated Deliverability Managers on Professional/Enterprise plans. Mercedes-Benz: 4&times; industry open rates. BioTrust: 33% open rate increase. Once a brand has built sender reputation on Maropost infrastructure, migration carries real deliverability risk they&apos;ve earned.</p></div>
+    <div class="moat-card"><h4>Send-Based Pricing vs Profile-Based Pricing</h4><p>Maropost charges per email sent &mdash; not per contact stored. As Klaviyo&apos;s February 2025 profile-based pricing shift pushed brands to pay for inactive and unsubscribed contacts, Maropost&apos;s model creates direct alignment with customer success. A brand with 200K contacts but 50K engaged senders pays for 50K sends &mdash; not 200K profiles. This structural advantage compounds as brands invest in list hygiene.</p></div>
+    <div class="moat-card dim"><h4>Journey Automation Investment Lock-In</h4><p>A brand that has built an abandoned cart flow, win-back sequence, post-purchase journey, and loyalty program in Maropost&apos;s Journey Builder has invested 40&ndash;100+ hours. Those journeys are not portable &mdash; migration means rebuilding from scratch. The multi-year scheduling capability deepens this: brands with campaigns pre-planned 12&ndash;18 months ahead are especially unlikely to disrupt live sequences mid-cycle.</p></div>
+    <div class="moat-card dim"><h4>24/7 Support Across All Plans</h4><p>24/7 live chat on all plans &mdash; including Essential at $279/month. Klaviyo restricts 24/7 chat to its highest tier. Salesforce bundles support separately at additional cost. For lean marketing teams without an internal email specialist, this support model is a genuine retention driver. G2&apos;s &quot;Easiest to Do Business With&quot; badge held across consecutive report cycles validates this as a real differentiator, not positioning copy.</p></div>
+  </div>
+  <div style="margin-top:24px">
+    <div class="eyebrow" style="margin-bottom:12px">Platform strength &mdash; verified against G2 Winter 2025 data and published case study outcomes</div>
+    <div class="rating-rows" id="rating-rows">
+      <div class="rating-row"><span class="rating-label">Email deliverability infrastructure</span><div class="rating-track"><div class="rating-fill" data-w="95" style="width:0%"></div></div><span class="rating-score">9.5</span></div>
+      <div class="rating-row"><span class="rating-label">Segmentation &amp; eRFM AI scoring</span><div class="rating-track"><div class="rating-fill" data-w="89" style="width:0%"></div></div><span class="rating-score">8.9</span></div>
+      <div class="rating-row"><span class="rating-label">Journey automation depth</span><div class="rating-track"><div class="rating-fill" data-w="86" style="width:0%"></div></div><span class="rating-score">8.6</span></div>
+      <div class="rating-row"><span class="rating-label">Delivery + revenue reporting</span><div class="rating-track"><div class="rating-fill" data-w="84" style="width:0%"></div></div><span class="rating-score">8.4</span></div>
+      <div class="rating-row"><span class="rating-label">Customer support quality (24/7)</span><div class="rating-track"><div class="rating-fill" data-w="92" style="width:0%"></div></div><span class="rating-score">9.2</span></div>
+      <div class="rating-row"><span class="rating-label">Pricing model alignment</span><div class="rating-track"><div class="rating-fill" data-w="88" style="width:0%"></div></div><span class="rating-score">8.8</span></div>
+      <div class="rating-row"><span class="rating-label">Ease of use (base campaigns)</span><div class="rating-track"><div class="rating-fill" data-w="79" style="width:0%"></div></div><span class="rating-score">7.9</span></div>
+      <div class="rating-row"><span class="rating-label">Journey Builder learnability</span><div class="rating-track"><div class="rating-fill" data-w="55" style="width:0%;background:#F59E0B"></div></div><span class="rating-score">5.5</span></div>
+      <div class="rating-row"><span class="rating-label">Cohort &amp; cross-journey analytics</span><div class="rating-track"><div class="rating-fill" data-w="38" style="width:0%;background:#EF4444"></div></div><span class="rating-score">3.8</span></div>
+      <div class="rating-row"><span class="rating-label">Pricing transparency</span><div class="rating-track"><div class="rating-fill" data-w="44" style="width:0%;background:#EF4444"></div></div><span class="rating-score">4.4</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- 07 COMPETITORS -->
+<div class="section" id="competitors">
+  <div class="eyebrow">07 &mdash; Competitive Positioning</div>
+  <div class="section-title">How Maropost Stacks Up</div>
+  <div class="section-desc">Maropost wins on deliverability infrastructure, send-based pricing, automation depth, and support. It loses on AI content generation, integration breadth, and pricing transparency.</div>
+  <div class="comp-wrap">
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th style="text-align:left">Capability</th>
+          <th class="hl">Maropost</th>
+          <th>Klaviyo</th>
+          <th>Dotdigital</th>
+          <th>Salesforce MC</th>
+          <th>Mailchimp</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Send-based pricing (not per profile)</td><td class="hl"><span class="c-yes">&#10003;</span></td><td><span class="c-no">&#10007; Profile-based</span></td><td><span class="c-part">Hybrid</span></td><td><span class="c-no">&#10007;</span></td><td><span class="c-no">&#10007;</span></td></tr>
+        <tr><td>98%+ deliverability + dedicated IP</td><td class="hl"><span class="c-yes">&#10003;</span></td><td><span class="c-yes">&#10003;</span></td><td><span class="c-yes">&#10003;</span></td><td><span class="c-yes">&#10003;</span></td><td><span class="c-part">Shared IP default</span></td></tr>
+        <tr><td>eRFM AI behavioural scoring</td><td class="hl"><span class="c-yes">&#10003; Dec 2024</span></td><td><span class="c-part">RFM only</span></td><td><span class="c-part">Partial</span></td><td><span class="c-yes">&#10003;</span></td><td><span class="c-no">&#10007;</span></td></tr>
+        <tr><td>Multi-year journey scheduling</td><td class="hl"><span class="c-yes">&#10003; Unique</span></td><td><span class="c-no">&#10007;</span></td><td><span class="c-part">Limited</span></td><td><span class="c-part">Limited</span></td><td><span class="c-no">&#10007;</span></td></tr>
+        <tr><td>Smart A/B (auto-winner on conversion)</td><td class="hl"><span class="c-yes">&#10003; Unique</span></td><td><span class="c-part">Basic</span></td><td><span class="c-yes">&#10003;</span></td><td><span class="c-yes">&#10003;</span></td><td><span class="c-part">Basic</span></td></tr>
+        <tr><td>Per-link CTR + revenue reporting</td><td class="hl"><span class="c-yes">&#10003;</span></td><td><span class="c-yes">&#10003;</span></td><td><span class="c-yes">&#10003;</span></td><td><span class="c-yes">&#10003;</span></td><td><span class="c-part">Limited revenue</span></td></tr>
+        <tr><td>Native SMS + Meta from one dashboard</td><td class="hl"><span class="c-yes">&#10003;</span></td><td><span class="c-yes">&#10003;</span></td><td><span class="c-yes">&#10003;</span></td><td><span class="c-yes">&#10003;</span></td><td><span class="c-part">SMS add-on</span></td></tr>
+        <tr><td>AI content generation (copy + subject)</td><td class="hl"><span class="c-no">&#10007;</span></td><td><span class="c-yes">&#10003;</span></td><td><span class="c-yes">&#10003;</span></td><td><span class="c-yes">&#10003;</span></td><td><span class="c-yes">&#10003;</span></td></tr>
+        <tr><td>24/7 support on all plans</td><td class="hl"><span class="c-yes">&#10003;</span></td><td><span class="c-no">&#10007; Top tier only</span></td><td><span class="c-part">Business hours</span></td><td><span class="c-part">Add-on cost</span></td><td><span class="c-no">&#10007;</span></td></tr>
+        <tr><td>Native web push notifications</td><td class="hl"><span class="c-no">&#10007;</span></td><td><span class="c-no">&#10007;</span></td><td><span class="c-yes">&#10003;</span></td><td><span class="c-yes">&#10003;</span></td><td><span class="c-no">&#10007;</span></td></tr>
+        <tr><td>Published pricing (starter tier)</td><td class="hl">$279/mo</td><td>~$400/mo</td><td>Custom only</td><td>$1,500+/mo</td><td>$20/mo</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="prose" style="margin-top:14px">The pricing comparison defines Maropost&apos;s competitive case for its core ICP. <strong>A brand with 200K contacts but sending to 50K engaged subscribers pays for 50K sends on Maropost. On Klaviyo&apos;s profile-based model post-February 2025, the same brand pays for all 200K profiles &mdash; including every unsubscribed and inactive contact.</strong> For brands actively managing list hygiene, Maropost&apos;s model rewards that behaviour directly. The February 2025 Klaviyo pricing shift created the most significant migration moment Maropost has seen in recent years.</p>
+</div>
+
+<!-- 08 GAPS -->
+<div class="section" id="gaps">
+  <div class="eyebrow">08 &mdash; Gaps &amp; Opportunities</div>
+  <div class="section-title">Where the Product Can Go Next</div>
+  <div class="section-desc">Six opportunity areas identified from direct client support experience, G2 Winter 2025 review analysis, competitive benchmarking, and pricing model observation.</div>
+  <div class="opp-grid">
+    <div class="opp-card">
+      <div class="opp-num">01</div>
+      <h4>Native AI Content Generation in Campaign Builder</h4>
+      <p>Klaviyo, Dotdigital, Salesforce MC, and Mailchimp all ship native AI copywriting and subject line generation. Maropost doesn&apos;t &mdash; despite having already invested in AI for eRFM scoring and product recommendations. For a platform positioning itself as AI-powered, the absence of AI writing assistance in the campaign builder is visible in every competitive evaluation. A native AI writing assistant with brand voice controls and per-segment subject line suggestions would close the most commonly cited 2025 feature gap.</p>
+      <div class="opp-impact">Impact: High &middot; Effort: Medium &middot; Priority: P1</div>
+    </div>
+    <div class="opp-card">
+      <div class="opp-num">02</div>
+      <h4>Journey Builder Guided Onboarding</h4>
+      <p>G2&apos;s most recurring criticism &mdash; across Winter 2025 and prior report cycles &mdash; is the steep learning curve specifically for the Journey Builder. The platform has &quot;a large number of open features which are only limited by the imagination&quot; &mdash; which is the exact description of a blank canvas problem. An industry-specific onboarding wizard (ecommerce, media, travel, retail) that walks new accounts through their first live journey &mdash; abandoned cart or win-back &mdash; would materially reduce time-to-value and early churn. This is a product problem, not a documentation problem.</p>
+      <div class="opp-impact">Impact: High &middot; Effort: Medium &middot; Priority: P1</div>
+    </div>
+    <div class="opp-card">
+      <div class="opp-num">03</div>
+      <h4>Cross-Journey Revenue Attribution</h4>
+      <p>Current reporting tells you what a campaign earned. It doesn&apos;t tell you which specific journey sequence, segment, or channel touchpoint drove the conversion when a customer moved through multiple flows. Data-driven CMOs export to Tableau or Google Sheets to answer this question. A closed-loop attribution model &mdash; journey &rarr; segment &rarr; channel &rarr; conversion &rarr; repeat purchase LTV &mdash; would become the core retention argument for the mid-market brands who treat email as a revenue channel, not just a broadcast medium.</p>
+      <div class="opp-impact">Impact: High &middot; Effort: High &middot; Priority: P2</div>
+    </div>
+    <div class="opp-card">
+      <div class="opp-num">04</div>
+      <h4>Transparent Self-Serve Pricing Calculator</h4>
+      <p>Multiple G2 reviewers and TrustRadius users flag pricing transparency as a specific frustration &mdash; &quot;custom pricing lacks transparency&quot; appears as a standalone negative across verified reviews. Mid-market buyers in 2025 benchmark options before speaking to sales, not after. A published send-volume pricing calculator (sends/month &times; tier = monthly cost) would reduce sales cycle friction, improve inbound conversion, and eliminate a line-item advantage that Klaviyo and Mailchimp hold simply by showing their numbers publicly.</p>
+      <div class="opp-impact">Impact: Medium &middot; Effort: Low &middot; Priority: P2</div>
+    </div>
+    <div class="opp-card">
+      <div class="opp-num">05</div>
+      <h4>Native Web Push Notifications</h4>
+      <p>Dotdigital offers web push as a standard channel. Maropost requires a third-party integration. For ecommerce brands running cart abandonment and win-back sequences, adding a web push touchpoint between email sends meaningfully increases recovery rates. A native push channel &mdash; managed from the same Journey Builder, sharing the same eRFM segments and contact database, reporting in the same analytics view &mdash; would complete the omnichannel story without requiring brands to add and manage another tool.</p>
+      <div class="opp-impact">Impact: Medium &middot; Effort: Medium &middot; Priority: P2</div>
+    </div>
+    <div class="opp-card">
+      <div class="opp-num">06</div>
+      <h4>Formal Agency Multi-Account Dashboard</h4>
+      <p>G2 reviewers from email agencies &mdash; including a five-year Maropost user who has moved multiple clients to the platform &mdash; actively use it for multi-brand account management. But there is no formal agency-tier dashboard: no unified cross-account campaign view, no consolidated performance reporting, no shared asset library. Building a first-class agency tier would formalise a distribution channel Maropost already has, increase account density, and create a defensible moat against Klaviyo&apos;s growing agency partner program.</p>
+      <div class="opp-impact">Impact: Medium &middot; Effort: High &middot; Priority: P3</div>
+    </div>
+  </div>
+</div>
+
+<!-- 09 VERDICT -->
+<div class="section" id="verdict">
+  <div class="eyebrow">09 &mdash; Verdict</div>
+  <div class="section-title">The Bottom Line</div>
+  <div class="two-col">
+    <div>
+      <p class="prose">Maropost Marketing Cloud is a genuinely strong platform for the customer it was built for: mid-market ecommerce and retail brands that need enterprise-grade deliverability, automation depth, and revenue reporting without Salesforce Marketing Cloud&apos;s price tag or Klaviyo&apos;s profile-based billing model.</p>
+      <p class="prose" style="margin-top:14px">Its three structural advantages &mdash; <strong>send-based pricing alignment, 98% deliverability infrastructure, and Journey Builder automation depth including unique multi-year scheduling</strong> &mdash; are not features competitors can match by shipping a sprint. They are architectural and operational commitments that compound over time. The G2 Winter 2025 recognition across 71 categories, Deloitte Fast 500 inclusion, and published case study outcomes from Mercedes-Benz, BioTrust, and REDEF Group confirm that the market is responding with real revenue signal, not just satisfaction scores.</p>
+      <p class="prose" style="margin-top:14px">The gaps are real but addressable. AI content generation is the most visible feature deficit &mdash; every major competitor has shipped it. Cross-journey attribution is the analytics ceiling data-driven CMOs consistently hit. Pricing transparency is a sales cycle friction point that costs inbound leads. None of these are platform-level failures. They are roadmap gaps in a platform that already gets the hard things &mdash; deliverability, segmentation, and automation &mdash; demonstrably right.</p>
+      <div class="pullquote" style="margin-top:20px">
+        <p>&quot;With Maropost, you do business with an expert team that cares about each client &mdash; you just can&apos;t beat that.&quot;</p>
+        <cite>Jon Bezoni, CEO &mdash; BioTrust Nutrition (33% increased open rate, published case study)</cite>
+      </div>
+    </div>
+    <div>
+      <div class="verdict-grid" style="grid-template-columns:1fr;gap:10px">
+        <div class="verdict-box strengths">
+          <div class="verdict-box-title">What Maropost Marketing Cloud gets right</div>
+          <ul>
+            <li>98% deliverability with dedicated IP infrastructure &mdash; the platform&apos;s founding DNA</li>
+            <li>Send-based pricing creates genuine alignment with customer success; no profile-hoarding incentive</li>
+            <li>Journey Builder depth &mdash; multi-year scheduling is unique in the mid-market ESP segment</li>
+            <li>Delivery, open, per-link CTR, revenue, and orders all in one campaign report</li>
+            <li>eRFM AI scoring (Dec 2024) surfaces VIPs and at-risk contacts without manual tagging</li>
+            <li>Smart A/B auto-winner on conversion &mdash; genuinely unique capability at this price tier</li>
+            <li>24/7 live chat on all plans &mdash; G2 &quot;Easiest to Do Business With&quot; across multiple cycles</li>
+            <li>Trusted by Mercedes-Benz, Fujifilm, Seiko, BioTrust &mdash; Deloitte Fast 500 recognised</li>
+          </ul>
+        </div>
+        <div class="verdict-box weaknesses">
+          <div class="verdict-box-title">Where Maropost Marketing Cloud has room to grow</div>
+          <ul>
+            <li>No native AI content generation &mdash; visible gap vs every major competitor in 2025</li>
+            <li>Journey Builder has steep learning curve &mdash; blank canvas problem for new users</li>
+            <li>Cross-journey attribution absent &mdash; power users export to external BI tools</li>
+            <li>Pricing transparency gap &mdash; &quot;custom pricing lacks transparency&quot; cited across G2 + TrustRadius</li>
+            <li>Email template library limited &mdash; design-forward brands pushed to custom HTML</li>
+            <li>No native web push channel &mdash; requires third-party integration</li>
+            <li>Agency multi-account use case underserved &mdash; no formal agency dashboard</li>
+            <li>Real-time reporting refresh delays noted at high send volume in multiple reviews</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- SUMMARY STRIP -->
+<div class="summary-strip">
+  <div><div class="s-label">Deliverability rate</div><div class="s-val">98%</div></div>
+  <div><div class="s-label">Starting price</div><div class="s-val w">$279/mo</div></div>
+  <div><div class="s-label">G2 Winter 2025 badges</div><div class="s-val">71</div></div>
+  <div><div class="s-label">Global brand customers</div><div class="s-val w">5,000+</div></div>
+  <div style="margin-left:auto"><div class="s-label">Teardown by</div><div style="font-size:13px;color:rgba(255,255,255,.7);margin-top:3px;font-weight:500">Shiwal Singh</div><div style="font-size:10px;color:var(--text3);margin-top:2px">shiwal50.github.io/portfolio</div></div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">Maropost Marketing Cloud</div>
+      <div>Product Teardown &mdash; PM Portfolio Piece</div>
+      <div style="margin-top:7px;color:var(--text3);font-size:11px;max-width:520px">Analysis based on direct experience as Client Support Specialist at Maropost (Dec 2023 &ndash; Oct 2024), cross-referenced with G2 Winter 2025 Reports, Deloitte Technology Fast 500 recognition, published case studies (Mercedes-Benz Canada, BioTrust Nutrition, REDEF Group), and independent product research. All observations are the author&apos;s own. Not affiliated with or endorsed by Maropost Inc.</div>
+    </div>
+    <div>
+      <div style="color:var(--text3);font-size:10px;margin-bottom:5px;letter-spacing:1px;text-transform:uppercase">Author</div>
+      <div style="color:rgba(255,255,255,.8);font-weight:500">Shiwal Singh</div>
+      <div style="color:var(--text3);margin-top:2px">MBA &middot; Amity University &middot; International Business</div>
+      <div style="color:var(--text3)">B2B SaaS &middot; Product Management &middot; Email Marketing &amp; CRM Automation</div>
+      <div style="margin-top:7px">
+        <a href="mailto:singhshiwal@gmail.com">singhshiwal@gmail.com</a>
+        &nbsp;&middot;&nbsp;
+        <a href="https://shiwal50.github.io/portfolio">Portfolio</a>
+        &nbsp;&middot;&nbsp;
+        <a href="https://linkedin.com/in/shiwal">LinkedIn</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(btn, id) {
+  document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active")});
+  document.querySelectorAll(".tab-panel").forEach(function(p){p.classList.remove("active")});
+  btn.classList.add("active");
+  document.getElementById("tab-" + id).classList.add("active");
+}
+var observer = new IntersectionObserver(function(entries){
+  entries.forEach(function(entry){
+    if(entry.isIntersecting){
+      entry.target.querySelectorAll(".rating-fill").forEach(function(bar){
+        var w = bar.getAttribute("data-w");
+        setTimeout(function(){ bar.style.width = w + "%"; }, 100);
+      });
+      observer.unobserve(entry.target);
+    }
+  });
+}, {threshold: 0.3});
+var ratingEl = document.getElementById("rating-rows");
+if(ratingEl) observer.observe(ratingEl);
+</script>
+</body>
+</html>
